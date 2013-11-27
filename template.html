@@ -1,0 +1,167 @@
+<link type="text/css" rel="stylesheet" href="http://annotorious.github.io/latest/themes/dark/annotorious-dark.css"/>
+<div class="row skeleton"> 
+    <div class="span12">
+        <p class="lead"> Tag all the faces people that you know <button id="btn-submit" class="btn btn-large btn-answer pull-right" value='NoTag'><i class="icon-repeat"></i> I don't recognize any person, try next one</button></p>
+    </div>
+    <div id="img-details" class="span4">
+        <h4 id="title"></h4>
+        <p id="description"></p>
+        <p><i class="icon icon-time"></i> Date taken: <span id="date_taken"></span></p>
+        <p><i class="icon icon-tag"></i> Tags: <span id="tags"></span></p>
+    </div>
+    <div class="span8">
+        <span id="photo-link">
+                <img id="photo" src="http://i.imgur.com/GeHxzb7.png" style="max-width=100%">
+        </span>
+    </div>
+</div><!-- End of Skeleton Row -->
+
+<div class="row skeleton">
+    <div class="span12">
+        <div id="disqus_show_btn" style="margin-top:5px;">
+            <button class="btn btn-primary btn-large btn-disqus" onclick="loadDisqus()"><i class="icon-comments"></i> Show comments</button>
+            <button class="btn btn-large btn-disqus" onclick="loadDisqus()" style="display:none"><i class="icon-comments"></i> Hide comments</button>
+        </div><!-- End of Disqus Button section -->
+        <!-- Disqus thread for the given task -->
+        <div id="disqus_thread" style="margin-top:5px;display:none"></div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Success and Error Messages for the user --> 
+    <div class="span6 offset2" style="height:50px">
+        <div id="success" class="alert alert-success" style="display:none;">
+            <a class="close">×</a>
+            <strong>Well done!</strong> Your answer has been saved
+        </div>
+        <div id="loading" class="alert alert-info" style="display:none;">
+            <a class="close">×</a>
+            Loading next task...
+        </div>
+        <div id="taskcompleted" class="alert alert-info" style="display:none;">
+            <strong>The task has been completed!</strong> Thanks a lot!
+        </div>
+        <div id="finish" class="alert alert-success" style="display:none;">
+            <strong>Congratulations!</strong> You have participated in all available tasks!
+            <br/>
+            <div class="alert-actions">
+                <a class="btn small" href="/">Go back</a>
+                <a class="btn small" href="/app">or, Check other applications</a>
+            </div>
+        </div>
+        <div id="error" class="alert alert-error" style="display:none;">
+            <a class="close">×</a>
+            <strong>Error!</strong> Something went wrong, please contact the site administrators
+        </div>
+    </div> <!-- End Success and Error Messages for the user -->
+</div> <!-- End of Row -->
+
+
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    function loadDisqus() {
+    $("#disqus_thread").toggle();
+    $(".btn-disqus").toggle();
+    var disqus_shortname = 'pybossa'; // required: replace example with your forum shortname
+    //var disqus_identifier = taskId;
+    var disqus_developer = 1;
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    }
+
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<script type="text/javascript" src="/static/js/vendor/annotorious.min.js"></script>
+<script type="text/javascript" src="/static/vendor/jquery.js"></script>
+<script type="text/javascript" src="http://annotorious.github.io/demos/semantic-tagging-plugin.js"></script>
+<script>
+      //anno.addPlugin('SemanticTagging', { endpoint_url: 'http://samos.mminf.univie.ac.at:8080/wikipediaminer' });
+</script>
+<script>
+pybossa.taskLoaded(function(task, deferred) {
+    if ( ! $.isEmptyObject(task) ) {
+        // load image from flickr
+        var img = $('<img />');
+        img.load(function() {
+            // continue as soon as the image is loaded
+            deferred.resolve(task);
+        });
+        // Flickr uses different suffixes for different picture sizes:
+        // _s.jpg    small square 75x75
+        // _q.jpg    large square 150x150
+        // _t.jpg    thumbnail, 100 on longest side
+        // _m.jpg    small, 240 on longest side
+        // _n.jpg    small, 320 on longest side
+        // .jpg      medium, 500 on longest side
+        // _z.jpg    medium 640, 640 on longest side
+        // _c.jpg    medium 800, 800 on longest side†
+        // _b.jpg    large, 1024 on longest side*
+        // _o.jpg    original image, either a jpg, gif or png, depending on source format
+        img.attr('src', task.info.url_raw + "_z.jpg");
+        img.attr('id', 'anno_' + task.id);
+        img.addClass('img-polaroid');
+        img.addClass('annotable');
+        task.info.image = img;
+    }
+    else {
+        deferred.resolve(task);
+    }
+});
+
+pybossa.presentTask(function(task, deferred) {
+    if ( !$.isEmptyObject(task) ) {
+        $('#photo-link').html('').append(task.info.image);
+        //$("#question").html(task.info.question);
+        $('#task-id').html(task.id);
+
+        $("#btn-submit").html("<i class='icon-repeat'></i> I don't recognize any person, try next one");
+        $("#btn-submit").removeClass("btn-success");
+        // Load data details
+        $("#title").text(task.info.title);
+        $("#description").html(task.info.description);
+        $("#date_taken").html(task.info.date_taken);
+        $("#tags").html(task.info.tags);
+
+        anno.makeAnnotatable(document.getElementById('anno_' + task.id));
+
+        anno.addHandler('onAnnotationCreated', function(annotation) {
+            //console.log(annotation.text);
+            $("#btn-submit").html("<i class='icon icon-save'></i> Save current annotations");
+            $("#btn-submit").addClass("btn-success");
+        });
+
+        $('.btn-answer').off('click').on('click', function(evt) {
+            var answer = $(evt.target).attr("value");
+            if (typeof answer != 'undefined') {
+                //console.log(answer);
+                pybossa.saveTask(task.id, anno.getAnnotations()).done(function() {
+                    deferred.resolve();
+                });
+                $("#loading").fadeIn(500);
+                if ($("#disqus_thread").is(":visible")) {
+                    $('#disqus_thread').toggle();
+                    $('.btn-disqus').toggle();
+                }
+            }
+            else {
+                $("#error").show();
+            }
+        });
+        $("#loading").hide();
+    }
+    else {
+        $(".skeleton").hide();
+        $("#loading").hide();
+        $("#finish").fadeIn(500);
+    }
+});
+
+pybossa.run('taggingpictures');
+</script>
