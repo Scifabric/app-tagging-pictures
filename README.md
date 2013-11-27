@@ -1,4 +1,4 @@
-PyBossa demo application Flickr Person
+PyBossa demo application tagging pictures
 ======================================
 
 This application has three files:
