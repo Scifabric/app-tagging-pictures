@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="span12">
+        <div id="modal" class="modal hide fade">
+            <div class="modal-header">
+                <h3>Tagging pictures tutorial</h3>
+            </div>
+            <div id="0" class="modal-body" style="display:none">
+                <p><strong>Hi!</strong> This is a <strong>demo application</strong> that shows how you can tag parts of pictures using the PyBossa framework in Crowdcrafting.org.
+               </p> 
+            </div>
+            <div id="1" class="modal-body" style="display:none">
+                <p>The application is really simple. It loads a photo from <a href="http://flickr.com">Flickr</a> and asks you this question: <strong>Tag all the faces that you know</strong></p>.
+                <p>You then hover the mouse over tha faces that you know, and draw a box clicking in the image, and you will be able to type the name of the person and save it.</p>
+                <p>You can do it as many times as you want. Simple, right? Now let's try it!</p>
+            </div>
+            <div class="modal-footer">
+                <a id="prevBtn" href="#" onclick="showStep('prev')" class="btn">Previous</a>
+                <a id="nextBtn" href="#" onclick="showStep('next')" class="btn btn-success">Next</a>
+                <a id="startContrib" href="../taggingpictures/newtask" class="btn btn-primary" style="display:none"><i class="icon-thumbs-up"></i> Try the demo!</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var step = -1;
+    function showStep(action) {
+        $("#" + step).hide();
+        if (action === 'next') {
+            step = step + 1;
+        }
+        if (action === 'prev') {
+            step = step - 1;
+        }
+        if (step === 0) {
+            $("#prevBtn").hide();
+        }
+        else {
+            $("#prevBtn").show();
+        }
+        if (step === 1) {
+            $("#nextBtn").hide();
+            $("#startContrib").show();
+        }
+        else {
+            $("#startContrib").hide();
+            $("#nextBtn").show();
+        }
+        $("#" + step).show();
+    }
+
+    showStep('next');
+    $("#modal").modal('show');
+</script>
