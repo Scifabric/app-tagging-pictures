@@ -93,18 +93,7 @@ pybossa.taskLoaded(function(task, deferred) {
             // continue as soon as the image is loaded
             deferred.resolve(task);
         });
-        // Flickr uses different suffixes for different picture sizes:
-        // _s.jpg    small square 75x75
-        // _q.jpg    large square 150x150
-        // _t.jpg    thumbnail, 100 on longest side
-        // _m.jpg    small, 240 on longest side
-        // _n.jpg    small, 320 on longest side
-        // .jpg      medium, 500 on longest side
-        // _z.jpg    medium 640, 640 on longest side
-        // _c.jpg    medium 800, 800 on longest side†
-        // _b.jpg    large, 1024 on longest side*
-        // _o.jpg    original image, either a jpg, gif or png, depending on source format
-        img.attr('src', task.info.url_raw + "_z.jpg");
+        img.attr('src', buildFlickrZsizedURL(task.info.url));
         img.attr('id', 'anno_' + task.id);
         img.addClass('img-polaroid');
         img.addClass('annotable');
@@ -114,6 +103,12 @@ pybossa.taskLoaded(function(task, deferred) {
         deferred.resolve(task);
     }
 });
+
+function buildFlickrZsizedURL(url) {
+    var splittedURL = url.split(".");
+    splittedURL.pop();
+    return splittedURL.join(".") + "_z.jpg";
+}
 
 pybossa.presentTask(function(task, deferred) {
     if ( !$.isEmptyObject(task) ) {
