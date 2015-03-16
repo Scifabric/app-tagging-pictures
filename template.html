@@ -93,7 +93,8 @@ pybossa.taskLoaded(function(task, deferred) {
             // continue as soon as the image is loaded
             deferred.resolve(task);
         });
-        img.attr('src', buildFlickrZsizedURL(task.info.url));
+        var url_raw = task.info.url_raw || genericFlickrURL(task.info.url);
+        img.attr('src', url_raw + "_z.jpg");
         img.attr('id', 'anno_' + task.id);
         img.addClass('img-polaroid');
         img.addClass('annotable');
@@ -104,10 +105,10 @@ pybossa.taskLoaded(function(task, deferred) {
     }
 });
 
-function buildFlickrZsizedURL(url) {
+function genericFlickrURL(url) {
     var splittedURL = url.split(".");
     splittedURL.pop();
-    return splittedURL.join(".") + "_z.jpg";
+    return splittedURL.join(".");
 }
 
 pybossa.presentTask(function(task, deferred) {
