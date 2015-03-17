@@ -1,7 +1,7 @@
-Tagging Pictures is a **demo application** for PyBossa that shows how you can
+Tagging Pictures is a **demo project** for PyBossa that shows how you can
 crowdsourcing an image tagging problem.
 
-This application uses the Flickr web service as the source of the data and the
+This project uses the Flickr web service as the source of the data and the
 pictures provided by [Australian War Memorial
 collection](http://www.flickr.com/photos/australian-war-
 memorial/with/8661409625/). By using Flickr, we have the possibility of using
@@ -10,7 +10,7 @@ that match a specific criteria, i.e. houses of 1920 or tsunami. In this case
 the application shows how you can tag faces of people from old photos in order
 to identify them.
 
-This demo application loads a picture from [Australian War Memorial
+This demo project loads a picture from [Australian War Memorial
 collection](http://www.flickr.com/photos/australian-war-
 memorial/with/8661409625/) and ask the following question: **Tag all the faces
 of people that you know**.
@@ -24,7 +24,7 @@ the name of the person and save it.
 Based on the answer of the users, we will be able to classify the photos,
 distributing the tasks (thanks to PyBossa) to different users and volunteers.
 
-__ Note If you want to learn more about how to use this application as a
+__ Note If you want to learn more about how to use this project as a
 template, check the:
 
   * [source code](http://github.com/PyBossa/app-annotorious)
@@ -32,7 +32,7 @@ template, check the:
   * [the official documentation of PyBossa](http://docs.pybossa.com/) and 
   * [the step by step tutorial.](http://docs.pybossa.com/en/latest/user/tutorial.html)
 
-Note [Application
+Note [Project
 icon](http://www.flickr.com/photos/cambodia4kidsorg/260004685/in/photostream/)
 courtesy of [Beth Kanter](http://www.flickr.com/photos/cambodia4kidsorg/)
 
